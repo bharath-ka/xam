@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button, Container } from 'react-bootstrap';
-import { register } from '../actions/auth';
-import { setAlert } from '../actions/alert';
+import { register } from '../../actions/auth';
+import { setAlert } from '../../actions/alert';
 import { Redirect } from 'react-router-dom';
 import { connect } from "react-redux";
 const Register = ({ setAlert, register, isAuthenticated }) => {

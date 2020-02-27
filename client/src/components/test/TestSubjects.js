@@ -2,8 +2,8 @@ import React, { Fragment, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getTestSubjects } from "../actions/test";
-import Spinner from './Spinner';
+import { getTestSubjects } from '../../actions/test';
+import Spinner from '../layouts/Spinner';
 import { Button, Card, Row, CardGroup } from 'react-bootstrap';
 
 const TestSubjects = ({ location }) => {

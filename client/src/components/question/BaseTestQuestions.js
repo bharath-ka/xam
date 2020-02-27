@@ -1,9 +1,9 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Card, Form, Pagination } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import Spinner from './Spinner';
-import { getBaseTestQuestions } from "../actions/question";
-import BaseAnswerSubmitModal from './BaseAnswerSubmitModal';
+import Spinner from '../layouts/Spinner';
+import { getBaseTestQuestions } from '../../actions/question';
+import BaseAnswerSubmitModal from '../answer/BaseAnswerSubmitModal';
 import PropTypes from 'prop-types'
 
 const BaseTestQuestions = ({ location, history, getBaseTestQuestions, auth, question: { baseTestQuestions, answers, loading } }) => {

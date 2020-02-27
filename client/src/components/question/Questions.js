@@ -1,9 +1,9 @@
 import React, { useEffect, Fragment, useState } from 'react';
-import { getNextQuestion } from "../actions/question";
+import { getNextQuestion } from "../../actions/question";
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from "react-router-dom";
-import Spinner from './Spinner';
-import AnswerSubmitModal from './AnswerSubmitModal';
+import Spinner from '../layouts/Spinner';
+import AnswerSubmitModal from '../answer/AnswerSubmitModal';
 import { Card, Form } from 'react-bootstrap';
 
 const Questions = ({ location, history }) => {

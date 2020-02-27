@@ -2,10 +2,9 @@ import React, { Fragment, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getTests } from "../actions/test";
-import Spinner from './Spinner';
+import { getTests } from '../../actions/test';
+import Spinner from '../layouts/Spinner';
 import { Button, Card, Row, CardGroup } from 'react-bootstrap';
-import { setAlert } from '../actions/alert';
 
 const Tests = () => {
 

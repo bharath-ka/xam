@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Container } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
-import { login } from '../actions/auth';
+import { login } from '../../actions/auth';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 const Login = ({ isAuthenticated, login }) => {
