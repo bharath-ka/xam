@@ -1,17 +1,24 @@
 import React, { Fragment } from 'react';
 import { Button, Nav, Navbar as Navbr } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../actions/auth';
 
-const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
-
+const Navbar = () => {
+    const auth = useSelector(state => state.auth);
+    const { isAuthenticated, loading } = auth;
+    const dispatch = useDispatch();
+    
+    const logOut = () => {
+        dispatch(logout());
+    }
+    
     const authLinks = (
         <Navbr.Text>
-            <Button onClick={logout} variant="outline-light">Logout</Button>
+            <Button onClick={logOut} variant="outline-light">Logout</Button>
         </Navbr.Text>
     );
+    
     const guestLinks = (
         <Navbr.Text>
 
@@ -25,6 +32,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
 
         </Navbr.Text>
     );
+    
     return (
         <Navbr bg="dark" variant="dark">
             <Link to="/">
@@ -39,12 +47,4 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
     );
 }
 
-Navbar.propTypes = {
-    logout: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
-}
-const mapStateToProps = state => ({
-    auth: state.auth
-})
-
-export default connect(mapStateToProps, { logout })(Navbar);
+export default Navbar;

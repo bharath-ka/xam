@@ -16,13 +16,15 @@ const Tests = () => {
     const { isAuthenticated, user } = auth;
     const { tests, loading } = test;
     const dispatch = useDispatch();
+
     useEffect(() => {
-        isAuthenticated &&
-            user &&
+        if (isAuthenticated && user) {
             dispatch(getTests(user.branch_id));
+        }
+        //eslint-disable-next-line
     }, [isAuthenticated, user]);
 
-    return loading && tests === null ? <Spinner /> : <Fragment>
+    return loading ? <Spinner /> : <Fragment>
         <Container style={{ marginTop: "26px" }}>
             <Row>
                 {tests.map(test => (

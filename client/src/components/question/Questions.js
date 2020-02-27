@@ -18,9 +18,10 @@ const Questions = ({ location, history }) => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        isAuthenticated &&
-            user &&
+        if (isAuthenticated && user) {
             dispatch(getNextQuestion(user._id, test_id));
+        }
+        //eslint-disable-next-line
     }, [isAuthenticated, user]);
 
     const [hookanswer, setHookanswer] = useState({});

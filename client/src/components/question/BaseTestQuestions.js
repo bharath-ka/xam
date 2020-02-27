@@ -1,22 +1,31 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Card, Form, Pagination } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Spinner from '../layouts/Spinner';
 import { getBaseTestQuestions } from '../../actions/question';
 import BaseAnswerSubmitModal from '../answer/BaseAnswerSubmitModal';
-import PropTypes from 'prop-types'
 
-const BaseTestQuestions = ({ location, history, getBaseTestQuestions, auth, question: { baseTestQuestions, answers, loading } }) => {
+const BaseTestQuestions = ({ location, history }) => {
     let base_id = location.state !== undefined ? location.state.base_id : '';
     let test_id = location.state !== undefined ? location.state.test_id : '';
     let module_ids = location.state !== undefined ? location.state.module_ids : '';
+    
+    const { auth, question } = useSelector(state => ({
+        auth: state.auth,
+        question: state.question
+    }));
+    const { baseTestQuestions, answers, loading } = question
+    const dispatch = useDispatch();
+    
     useEffect(() => {
         auth.user &&
-            getBaseTestQuestions(base_id, auth.user._id, history, module_ids, test_id);
+            dispatch(getBaseTestQuestions(base_id, auth.user._id, history, module_ids, test_id));
         baseTestQuestions.length > 0 &&
             setQuestion(baseTestQuestions);
         setHookanswer(answers);
-    }, [getBaseTestQuestions, baseTestQuestions.length, base_id, auth.user, history]);
+        //eslint-disable-next-line
+    }, [baseTestQuestions.length, base_id, auth.user, history]);
+
     const [hookanswer, setHookanswer] = useState({});
     const handleChange = (e) => {
         answers[e.target.name] = e.target.value
@@ -80,15 +89,5 @@ const BaseTestQuestions = ({ location, history, getBaseTestQuestions, auth, ques
             </Fragment >) : <Spinner />
     )
 }
-BaseTestQuestions.propTypes = {
-    auth: PropTypes.object.isRequired,
-    question: PropTypes.object.isRequired,
-    getBaseTestQuestions: PropTypes.func.isRequired
-}
 
-const mapStateToProps = (state) => ({
-    auth: state.auth,
-    question: state.question
-})
-
-export default connect(mapStateToProps, { getBaseTestQuestions })(BaseTestQuestions);
+export default BaseTestQuestions;

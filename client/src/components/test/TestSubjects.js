@@ -17,10 +17,11 @@ const TestSubjects = ({ location }) => {
     const { testsubjects, loading } = test;
     const dispatch = useDispatch();
     useEffect(() => {
-        isAuthenticated &&
-            user &&
+        if (isAuthenticated && user) {
             dispatch(getTestSubjects(test_id, user.branch_id, user.section_id, vcode));
-    }, [getTestSubjects, isAuthenticated, user]);
+        }
+        //eslint-disable-next-line
+    }, [isAuthenticated, user, test_id]);
     return loading && testsubjects !== null ? <Spinner /> : <Fragment>
         <Link to={{
             pathname: '/tests',

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Form, Button, Container } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { login } from '../../actions/auth';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-const Login = ({ isAuthenticated, login }) => {
+const Login = () => {
+
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const dispatch = useDispatch();
 
     const [formData, setFormData] = useState({
         email: '',
@@ -18,12 +20,11 @@ const Login = ({ isAuthenticated, login }) => {
     });
     const handleSubmit = async (e) => {
         e.preventDefault();
-        login({ email, password });
+        dispatch(login({ email, password }));
     }
     if (isAuthenticated) {
         return <Redirect to='/tests'></Redirect>
     }
-
 
     return (
         <Container className='jumbotron' style={{ marginTop: "20px" }}>
@@ -49,13 +50,4 @@ const Login = ({ isAuthenticated, login }) => {
     )
 }
 
-Login.propTypes = {
-    login: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool,
-}
-
-const mapStatetoProps = (state) => ({
-    isAuthenticated: state.auth.isAuthenticated
-})
-
-export default connect(mapStatetoProps, { login })(Login);
+export default Login;
