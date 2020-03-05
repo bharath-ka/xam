@@ -1,12 +1,15 @@
 import React, { useState, Fragment } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Button } from "react-bootstrap";
 import { postAnswers } from '../../actions/answers';
-import PropTypes from 'prop-types'
 
-const AnswerSubmitModal = ({ answers, auth, postAnswers, test_id, module_ids, history, questionround }) => {
+const AnswerSubmitModal = ({ answers, test_id, module_ids, history, questionround }) => {
+
+    const auth = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+    
     const [show, setShow] = useState(false);
-
+    
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const handleSubmitAnswer = () => {
@@ -18,7 +21,7 @@ const AnswerSubmitModal = ({ answers, auth, postAnswers, test_id, module_ids, hi
             history,
             currentround: questionround.currentRound
         };
-        postAnswers(ansObj);
+        dispatch(postAnswers(ansObj));
         setShow(false);
     }
     return (
@@ -44,15 +47,5 @@ const AnswerSubmitModal = ({ answers, auth, postAnswers, test_id, module_ids, hi
         </Fragment>
     );
 }
-AnswerSubmitModal.propTypes = {
-    postAnswers: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
-}
 
-const mapStatetoProps = (state) => ({
-    auth: state.auth,
-    answer: state.answer
-})
-
-
-export default connect(mapStatetoProps, { postAnswers })(AnswerSubmitModal);
+export default AnswerSubmitModal;
