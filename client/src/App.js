@@ -11,14 +11,15 @@ import Navbar from './components/layouts/Navbar';
 import Landing from './components/layouts/Landing';
 import Routes from './components/routing/Routes';
 
-
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
+
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
   }, [])
+
   return (
     <Provider store={store}>
       <Router>
