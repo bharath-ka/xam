@@ -2,7 +2,7 @@ const router = require('express').Router();
 const Subject = require('../../models/Subject');
 const auth = require('../../middleware/auth')
 
-router.post('/add', auth, async (req, res) => {
+router.post('/add', async (req, res) => {
     const {
         name,
         subjectcode,

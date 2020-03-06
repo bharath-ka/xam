@@ -1,6 +1,7 @@
+import React from 'react';
 import axios from 'axios';
-import { setAlert } from './alert';
-
+import { setAlert, removeAlert } from './alert';
+import { Button } from 'shards-react';
 import {
     POST_BASE_ANSWERS,
     ANSWERS_ERROR,
@@ -24,7 +25,16 @@ export const postBaseAnswers = ({ user_id, qanswers, test_id, base_id, history, 
             type: GET_TEST_QUESTION,
             payload: res.data
         });
-        dispatch(setAlert('Baseline Testing done successfully', 'success'))
+        dispatch(setAlert({
+            message: 'Baseline Testing done successfully',
+            options: {
+                key: new Date().getTime() + Math.random(),
+                variant: 'success',
+                action: key => (
+                    <Button size="sm" theme="success" onClick={() => dispatch(removeAlert(key))}><i className="fa fa-close"></i></Button>
+                ),
+            },
+        }))
         history.push({
             pathname: '/questions',
             state: {
@@ -54,7 +64,16 @@ export const postAnswers = ({ user_id, qanswers, test_id, module_ids, currentrou
         //     type: POST_ANSWERS,
         //     payload: res.data
         // });
-        dispatch(setAlert(`Question Round ${currentround} submitted successfully`, 'success'))
+        dispatch(setAlert({
+            message: `Question Round ${currentround} submitted successfully`,
+            options: {
+                key: new Date().getTime() + Math.random(),
+                variant: 'success',
+                action: key => (
+                    <Button size="sm" theme="success" onClick={() => dispatch(removeAlert(key))}><i className="fa fa-close"></i></Button>
+                ),
+            },
+        }))
         dispatch({
             type: GET_TEST_QUESTION,
             payload: res.data

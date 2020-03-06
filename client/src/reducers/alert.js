@@ -1,14 +1,43 @@
-import { SET_ALERT, REMOVE_ALERT } from "../actions/types";
+import {
+    SET_ALERT,
+    CLOSE_ALERT,
+    REMOVE_ALERT
+} from "../actions/types";
 
-const initialState = [];
+const initialState = {
+    notifications: [],
+};
 
 export default function (state = initialState, action) {
-    const { type, payload } = action;
-    switch (type) {
+
+    switch (action.type) {
         case SET_ALERT:
-            return [...state, payload];
+            return {
+                ...state,
+                notifications: [
+                    ...state.notifications,
+                    {
+                        key: action.key,
+                        ...action.notification,
+                    },
+                ],
+            };
+        case CLOSE_ALERT:
+            return {
+                ...state,
+                notifications: state.notifications.filter(
+                    notification => notification.key !== action.key,
+                ),
+            };
         case REMOVE_ALERT:
-            return state.filter(alert => alert.id !== payload);
+            return {
+                ...state,
+                notifications: state.notifications.map(notification => (
+                    (action.dismissAll || notification.key === action.key)
+                        ? { ...notification, dismissed: true }
+                        : { ...notification }
+                )),
+            }
         default:
             return state;
     }

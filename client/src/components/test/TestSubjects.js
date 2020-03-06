@@ -1,11 +1,16 @@
 import React, { Fragment, useEffect } from 'react';
-import { Container } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getTestSubjects } from '../../actions/test';
 import Spinner from '../layouts/Spinner';
-import { Button, Card, Row, CardGroup } from 'react-bootstrap';
-
+import {
+    Card,
+    CardTitle,
+    CardBody,
+    Button,
+    Col,
+    Row,
+} from "shards-react";
 const TestSubjects = ({ location }) => {
     const test_id = location.state !== undefined ? location.state.test_id : '';
     const vcode = location.state !== undefined ? location.state.vcode : 0;
@@ -22,43 +27,41 @@ const TestSubjects = ({ location }) => {
         }
         //eslint-disable-next-line
     }, [isAuthenticated, user, test_id]);
-    return loading && testsubjects !== null ? <Spinner /> : <Fragment>
+    return loading ? <Spinner /> : <Fragment>
         <Link to={{
             pathname: '/tests',
         }}
         >
-            <Button style={{ marginTop: "10px" }} variant='dark'>Go Back</Button>
+            <Button pill style={{ marginBottom: "10px" }} variant='dark'>Go Back</Button>
         </Link>
-        <Container style={{ marginTop: "26px" }}>
+        <h3 className="text-center">Test Subjects</h3>
+        <Row>
+            {testsubjects.map(tsub => (
+                <Col sm="6" lg="6" >
+                    <Card style={{ marginBottom: "10px" }}>
+                        <CardBody>
+                            <CardTitle >{tsub.subject.name}</CardTitle>
+                            {tsub.completed
+                                ? (<Button className='text-center' theme="success">Completed</Button>)
+                                : (<Link to={{
+                                    pathname: '/basetestquestions',
+                                    state: {
+                                        test_id: test_id,
+                                        base_id: tsub.base_id,
+                                        module_ids: tsub.module_ids
+                                    }
+                                }}
+                                >
+                                    <Button className='text-center' variant='dark'>Go</Button>
+                                </Link>)
+                            }
 
-            <Row>
-                {testsubjects.map(tsub => (
-                    <CardGroup className='text-center' key={tsub._id}>
-                        <Card border='dark'>
-                            <Card.Header> {tsub.subject.name}</Card.Header>
-                            <Card.Body className="border-dark mb-3" style={{ marginTop: "5px", marginLeft: "5px", width: "13rem" }}>
-                                {tsub.completed
-                                    ? (<Button className='text-center' variant='dark'>Completed</Button>)
-                                    : (<Link to={{
-                                        pathname: '/basetestquestions',
-                                        state: {
-                                            test_id: test_id,
-                                            base_id: tsub.base_id,
-                                            module_ids: tsub.module_ids
-                                        }
-                                    }}
-                                    >
-                                        <Button className='text-center' variant='dark'>Go</Button>
-                                    </Link>)
-                                }
-
-                            </Card.Body>
-                        </Card>
-                    </CardGroup>
-                ))
-                }
-            </Row>
-        </Container >
+                        </CardBody>
+                    </Card>
+                </Col>
+            ))
+            }
+        </Row>
     </Fragment >;
 }
 export default TestSubjects;

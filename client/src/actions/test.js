@@ -1,5 +1,7 @@
+import React from 'react';
 import axios from 'axios';
-import { setAlert } from '../actions/alert';
+import { setAlert, removeAlert } from './alert';
+import { Button } from 'shards-react';
 
 import {
     GET_TESTS,
@@ -33,7 +35,16 @@ export const getTests = (branch_id) => async dispatch => {
 export const getTestSubjects = (test_id, branch_id, section_id, vcode) => async dispatch => {
     try {
         if (vcode)
-            dispatch(setAlert("Test Completed", 'success'))
+            dispatch(setAlert({
+                message: 'Test completed successfully',
+                options: {
+                    key: new Date().getTime() + Math.random(),
+                    variant: 'success',
+                    action: key => (
+                        <Button size="sm" theme="success" onClick={() => dispatch(removeAlert(key))}><i className="fa fa-close"></i></Button>
+                    ),
+                },
+            }))
         const config = {
             headers: {
                 'Content-Type': 'application/json'

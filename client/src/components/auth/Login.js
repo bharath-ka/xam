@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
-import { Form, Button, Container } from 'react-bootstrap';
+import {
+    Form, FormInput, FormGroup, Card, CardBody, Button, InputGroup,
+    InputGroupText,
+    InputGroupAddon,
+    CardLink
+} from "shards-react";
+import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { login } from '../../actions/auth';
 const Login = () => {
 
@@ -27,26 +35,42 @@ const Login = () => {
     }
 
     return (
-        <Container className='jumbotron' style={{ marginTop: "20px" }}>
-            <Form onSubmit={e => handleSubmit(e)}>
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" name='email' value={email} onChange={e => handleChange(e)} />
-                    <Form.Text className="text-muted">
-                        Enter the creds ,what are you waiting for nigga!!
-                </Form.Text>
-                </Form.Group>
+        <div className="mt-5 col-lg-6 mx-auto">
+            <Card style={{ backgroundColor: "#f9f7f7" }} >
+                <CardBody>
+                    <h3 className="text-center  mb-4">Login</h3>
 
-                <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" name='password' value={password} onChange={e => handleChange(e)} />
-                </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
-             </Button>
-            </Form>
-        </Container>
+                    <Form onSubmit={handleSubmit}>
+                        <FormGroup>
+                            <label htmlFor="email"><span className="text-primary">Email</span></label>
+                            <InputGroup>
+                                <InputGroupAddon type="prepend">
+                                    <InputGroupText> <FontAwesomeIcon icon={faUser} /></InputGroupText>
+                                </InputGroupAddon>
+                                <FormInput type="email" id="email" placeholder="Enter email" name='email' value={email} onChange={e => handleChange(e)} />
+                            </InputGroup>
+                        </FormGroup>
+                        <FormGroup className="mb-4">
+                            <label htmlFor="password"><span className="text-primary">Password</span></label>
+                            <InputGroup className="mb-2">
+                                <InputGroupAddon type="prepend">
+                                    <InputGroupText> <FontAwesomeIcon icon={faLock} /></InputGroupText>
+                                </InputGroupAddon>
+                                <FormInput type="password" placeholder="Password" id="password" name='password' value={password} onChange={e => handleChange(e)} />
+                            </InputGroup>
+                        </FormGroup>
+                        <div className="text-center mb-3">
+                            <Button pill theme="primary" type="submit">
+                                Login
+                            </Button>
+                        </div>
 
+                    </Form>
+                    <h6 className="text-center">Don’t have an account? <Link to="/signup"><CardLink className="card-link">Sign Up</CardLink></Link> </h6>
+                </CardBody>
+            </Card>
+
+        </div>
     )
 }
 

@@ -1,5 +1,7 @@
+import React from 'react';
 import axios from 'axios';
-import { setAlert } from './alert';
+import { setAlert, removeAlert } from './alert';
+import { Button } from 'shards-react';
 import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
@@ -52,7 +54,18 @@ export const register = ({ name, email, password, role, section_id, branch_id })
         console.log(err.message);
         const errors = err.response.data.errors;
         if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+            errors.forEach(error => dispatch(setAlert(
+                {
+                    message: error.msg,
+                    options: {
+                        key: new Date().getTime() + Math.random(),
+                        variant: 'error',
+                        action: key => (
+                            <Button size="sm" theme="danger" onClick={() => dispatch(removeAlert(key))}><i className="fa fa-close"></i></Button>
+                        ),
+                    },
+                }
+            )));
         }
         dispatch({
             type: REGISTER_FAIL
@@ -63,6 +76,7 @@ export const register = ({ name, email, password, role, section_id, branch_id })
 
 //Login User
 export const login = ({ email, password }) => async dispatch => {
+
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -72,7 +86,6 @@ export const login = ({ email, password }) => async dispatch => {
     const body = JSON.stringify({ email, password });
     try {
         const res = await axios.post('/api/auth', body, config);
-
         dispatch({
             type: LOGIN_SUCCESS,
             payload: res.data
@@ -82,7 +95,18 @@ export const login = ({ email, password }) => async dispatch => {
         console.log(err.message);
         const errors = err.response.data.errors;
         if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+            errors.forEach(error => dispatch(setAlert(
+                {
+                    message: error.msg,
+                    options: {
+                        key: new Date().getTime() + Math.random(),
+                        variant: 'error',
+                        action: key => (
+                            <Button size="sm" theme="danger" onClick={() => dispatch(removeAlert(key))}><i className="fa fa-close"></i></Button>
+                        ),
+                    },
+                }
+            )));
         }
         dispatch({
             type: LOGIN_FAIL

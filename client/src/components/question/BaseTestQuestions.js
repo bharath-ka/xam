@@ -1,22 +1,30 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Card, Form, Pagination } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import Spinner from '../layouts/Spinner';
 import { getBaseTestQuestions } from '../../actions/question';
 import BaseAnswerSubmitModal from '../answer/BaseAnswerSubmitModal';
+import {
+    Card,
+    CardBody,
+    CardHeader,
+    CardTitle,
+    FormTextarea,
+    FormGroup
+} from "shards-react";
+import { Pagination } from 'react-bootstrap';
 
 const BaseTestQuestions = ({ location, history }) => {
     let base_id = location.state !== undefined ? location.state.base_id : '';
     let test_id = location.state !== undefined ? location.state.test_id : '';
     let module_ids = location.state !== undefined ? location.state.module_ids : '';
-    
+
     const { auth, question } = useSelector(state => ({
         auth: state.auth,
         question: state.question
     }));
     const { baseTestQuestions, answers, loading } = question
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
         auth.user &&
             dispatch(getBaseTestQuestions(base_id, auth.user._id, history, module_ids, test_id));
@@ -46,20 +54,23 @@ const BaseTestQuestions = ({ location, history }) => {
     return (
         !loading && baseTestQuestions !== null && baseTestQuestions.length > 0 ?
             (<Fragment>
-                <div className="display-5 lead text-center">Question Round : Base Test</div>
+                <div className="display-5 lead text-center mb-3">Question Round : Base Test</div>
                 {
                     currentQuestions.map((baseTestQuestion, index) => (
-                        <Card bg="light" key={baseTestQuestion._id} >
-                            <Card.Header>Rank : {baseTestQuestion.rank}</Card.Header>
-                            <Card.Body>
-                                <Card.Title>{baseTestQuestion.question}</Card.Title>
-                                <Form.Group controlId="exampleForm.ControlTextarea1">
-                                    <Form.Label>Answer Key</Form.Label>
-                                    <Form.Control name={baseTestQuestion._id} value={
-                                        hookanswer[baseTestQuestion._id]
-                                    } as="textarea" rows="3" onChange={e => handleChange(e)} />
-                                </Form.Group>
-                            </Card.Body>
+                        <Card key={baseTestQuestion._id} style={{ backgroundColor: "#f9f7f7" }}>
+                            <CardHeader>Rank : {baseTestQuestion.rank}</CardHeader>
+                            <CardBody>
+                                <CardTitle>{baseTestQuestion.question}</CardTitle>
+                                <FormGroup >
+                                    <label htmlFor="anskey"><span className="">Answer</span></label>
+                                    <FormTextarea
+                                        name={baseTestQuestion._id}
+                                        value={hookanswer[baseTestQuestion._id]}
+                                        rows="6"
+                                        onChange={e => handleChange(e)}
+                                    />
+                                </FormGroup>
+                            </CardBody>
                         </Card>
                     ))
                 }

@@ -1,16 +1,16 @@
 import React, { useState, Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Modal, Button } from "react-bootstrap";
 import { postBaseAnswers } from '../../actions/answers';
-
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "shards-react";
 const BaseAnswerSubmitModal = ({ answers, test_id, base_id, history, module_ids }) => {
 
     const auth = useSelector(state => state.auth);
     const dispatch = useDispatch();
 
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [open, setOpen] = useState(false);
+    const toggle = () => {
+        setOpen(!open);
+    }
     const handleSubmitAnswer = () => {
         const ansObj = {
             user_id: auth.user._id,
@@ -21,28 +21,28 @@ const BaseAnswerSubmitModal = ({ answers, test_id, base_id, history, module_ids 
             module_ids
         };
         dispatch(postBaseAnswers(ansObj));
-        setShow(false);
+        setOpen(false);
     }
 
     return (
         <Fragment>
-            <Button variant="dark" onClick={handleShow}>
+            <Button style={{ marginTop: "10px" }} onClick={toggle}>
                 Submit
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Submit Answer</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Are you sure,you want to submit the answers?</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+            <Modal open={open} toggle={toggle}>
+                <ModalHeader closeButton>
+                    Submit Answer
+                </ModalHeader>
+                <ModalBody>Are you sure,you want to submit the answers?</ModalBody>
+                <ModalFooter>
+                    <Button theme="secondary" onClick={toggle}>
                         Close
                      </Button>
-                    <Button onClick={handleSubmitAnswer} variant="warning">
+                    <Button onClick={handleSubmitAnswer} >
                         Submit
                     </Button>
-                </Modal.Footer>
+                </ModalFooter>
             </Modal>
         </Fragment>
     );

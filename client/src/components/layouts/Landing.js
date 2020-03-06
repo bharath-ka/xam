@@ -12,7 +12,7 @@ const Landing = () => {
 
     return (
         <div className='display-4 text-center'>
-            F Indian Education Sytem
+            XMS
         </div>
     )
 }

@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { SnackbarProvider } from 'notistack';
 
 import { Provider } from 'react-redux';
 import store from './store';
@@ -22,15 +23,22 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <Router>
-        <Fragment>
-          <Navbar />
+      <SnackbarProvider
+        maxSnack={6}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right'
+        }}>
+        <Router>
+          <Fragment>
+            <Navbar />
             <Switch>
               <Route exact path='/' component={Landing} />
               <Route component={Routes} />
             </Switch>
-        </Fragment>
-      </Router>
+          </Fragment>
+        </Router>
+      </SnackbarProvider>
     </Provider>
   );
 }

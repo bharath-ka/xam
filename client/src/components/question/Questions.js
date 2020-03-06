@@ -4,7 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from "react-router-dom";
 import Spinner from '../layouts/Spinner';
 import AnswerSubmitModal from '../answer/AnswerSubmitModal';
-import { Card, Form } from 'react-bootstrap';
+import {
+    Card,
+    CardBody,
+    CardHeader,
+    CardTitle,
+    FormTextarea,
+    FormGroup
+} from "shards-react";
 
 const Questions = ({ location, history }) => {
     const { auth, question } = useSelector(state => ({
@@ -29,7 +36,6 @@ const Questions = ({ location, history }) => {
         answers[e.target.name] = e.target.value
         setHookanswer({ ...answers });
     }
-
     if (completed) {
         return <Redirect to={{
             pathname: '/testsubjects',
@@ -43,18 +49,21 @@ const Questions = ({ location, history }) => {
     return (
         !loading && nextQuestion !== null && nextQuestion._id !== undefined ? (
             <Fragment>
-                <div className="display-5 lead text-center">Question : {questionRound !== null ? questionRound.currentRound : ''} of {questionRound !== null ? questionRound.totalRound : ''}</div>
-                <Card bg="light" key={nextQuestion._id} >
-                    <Card.Header>Rank : {nextQuestion.rank}</Card.Header>
-                    <Card.Body>
-                        <Card.Title>{nextQuestion.question}</Card.Title>
-                        <Form.Group controlId="exampleForm.ControlTextarea1">
-                            <Form.Label>Answer Key</Form.Label>
-                            <Form.Control name={nextQuestion._id} value={
-                                hookanswer[nextQuestion._id]
-                            } as="textarea" rows="3" onChange={e => handleChange(e)} />
-                        </Form.Group>
-                    </Card.Body>
+                <div className="display-5 lead text-center mb-3">Question : {questionRound !== null ? questionRound.currentRound : ''} of {questionRound !== null ? questionRound.totalRound : ''}</div>
+                <Card key={nextQuestion._id} style={{ backgroundColor: "#f9f7f7" }}>
+                    <CardHeader>Rank : {nextQuestion.rank}</CardHeader>
+                    <CardBody>
+                        <CardTitle>{nextQuestion.question}</CardTitle>
+                        <FormGroup >
+                            <label htmlFor="anskey"><span className="">Answer</span></label>
+                            <FormTextarea
+                                name={nextQuestion._id}
+                                value={hookanswer[nextQuestion._id]}
+                                rows="6"
+                                onChange={e => handleChange(e)}
+                            />
+                        </FormGroup>
+                    </CardBody>
                 </Card>
                 <AnswerSubmitModal answers={hookanswer} test_id={test_id} history={history} questionround={questionRound} module_ids={module_ids} />
             </Fragment>
