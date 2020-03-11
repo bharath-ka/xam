@@ -55,7 +55,7 @@ const NavBar = () => {
     return (
         <Navbar type="dark" theme="primary" expand="md" style={{ marginBottom: "20px" }}>
             <Link to="/">
-                <NavbarBrand >XMS</NavbarBrand>
+                <NavbarBrand>XAM</NavbarBrand>
             </Link>
 
             <NavbarToggler onClick={toggleNavbar} />
