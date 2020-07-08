@@ -1,41 +1,40 @@
-import React, { Fragment, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState, useEffect, Fragment } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { getTests } from '../../actions/test';
-import Spinner from '../layouts/Spinner';
 import { Card, CardTitle, CardBody, Button, Col, Row } from 'shards-react';
+import Spinner from '../layouts/Spinner';
 
-const Tests = () => {
-  const { auth, test } = useSelector((state) => ({
-    auth: state.auth,
-    test: state.test,
-  }));
-
-  const { isAuthenticated, user } = auth;
-  const { tests, loading } = test;
-  const dispatch = useDispatch();
+const TeacherTest = ({ history }) => {
+  const [tests, setTests] = useState([]);
 
   useEffect(() => {
-    if (isAuthenticated && user) {
-      dispatch(getTests(user.branch_id));
-    }
-    //eslint-disable-next-line
-  }, [isAuthenticated, user]);
-
-  return loading ? (
+    const fetchTests = async () => {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      const body = JSON.stringify({ branch_id: '5e38f67588673563d60c5f38' });
+      const res = await axios.post('/api/tests/list', body, config);
+      console.log(res.data);
+      setTests(res.data);
+    };
+    fetchTests();
+  }, []);
+  return tests.length === 0 ? (
     <Spinner />
   ) : (
     <Fragment>
       <h2 className='text-center'>Tests</h2>
       <Row>
-        {tests.map((test) => (
-          <Col key={test._id}sm='12' lg='6'>
+        {tests.slice(0,1).map((test) => (
+          <Col key={test._id} sm='12' lg='6'>
             <Card style={{ marginBottom: '10px' }}>
               <CardBody>
                 <CardTitle>{test.name}</CardTitle>
                 <Link
                   to={{
-                    pathname: '/testsubjects',
+                    pathname: '/teacher/students',
                     state: {
                       test_id: test._id,
                     },
@@ -54,4 +53,4 @@ const Tests = () => {
   );
 };
 
-export default Tests;
+export default TeacherTest;
