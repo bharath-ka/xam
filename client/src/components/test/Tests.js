@@ -28,27 +28,29 @@ const Tests = () => {
     <Fragment>
       <h2 className='text-center'>Tests</h2>
       <Row>
-        {tests.map((test) => (
-          <Col key={test._id}sm='12' lg='6'>
-            <Card style={{ marginBottom: '10px' }}>
-              <CardBody>
-                <CardTitle>{test.name}</CardTitle>
-                <Link
-                  to={{
-                    pathname: '/testsubjects',
-                    state: {
-                      test_id: test._id,
-                    },
-                  }}
-                >
-                  <Button className='text-center' variant='dark'>
-                    Go
-                  </Button>
-                </Link>
-              </CardBody>
-            </Card>
-          </Col>
-        ))}
+        {tests
+          .filter((tests, i) => i === 0)
+          .map((test) => (
+            <Col key={test._id} sm='12' lg='6'>
+              <Card style={{ marginBottom: '10px' }}>
+                <CardBody>
+                  <CardTitle>{test.name}</CardTitle>
+                  <Link
+                    to={{
+                      pathname: '/testsubjects',
+                      state: {
+                        test_id: test._id,
+                      },
+                    }}
+                  >
+                    <Button className='text-center' variant='dark'>
+                      Go
+                    </Button>
+                  </Link>
+                </CardBody>
+              </Card>
+            </Col>
+          ))}
       </Row>
     </Fragment>
   );

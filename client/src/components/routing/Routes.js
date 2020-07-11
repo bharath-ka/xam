@@ -13,6 +13,8 @@ import PrivateRoute from '../routing/PrivateRoute';
 import NotFound from '../layouts/NotFound';
 
 import TeacherTest from '../teacher/TeacherTest';
+import AdminLogin from '../auth/AdminLogin';
+import TeacherLogin from '../teacher/TeacherLogin';
 import TeacherSubjects from '../teacher/TeacherSubjects';
 import TeacherStudents from '../teacher/TeacherStudents';
 import TeacherAnswerScript from '../teacher/TeacherAnswerScript';
@@ -23,6 +25,8 @@ const Routes = () => {
       <Alert />
       <Switch>
         <Route exact path='/login' component={Login} />
+        <Route exact path='/teacher/login' component={TeacherLogin} />
+        <Route exact path='/admin' component={AdminLogin} />
         <Route exact path='/signup' component={Register} />
         <Route exact path='/teacher/tests' component={TeacherTest} />
         <Route exact path='/teacher/subjects' component={TeacherSubjects} />
@@ -47,3 +51,12 @@ const Routes = () => {
 };
 
 export default Routes;
+
+
+const arr = [
+  'Establishment of standards',
+  'Measuring actual performance',
+  'Comparing actual performance with the standards',
+  'Taking corrective measures',
+
+]

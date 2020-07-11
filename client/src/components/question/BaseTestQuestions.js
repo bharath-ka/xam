@@ -78,6 +78,7 @@ const BaseTestQuestions = ({ location, history }) => {
           <CardHeader>Rank : {baseTestQuestion.rank}</CardHeader>
           <CardBody>
             <CardTitle>{baseTestQuestion.question}</CardTitle>
+            <CardHeader>Seperate points using empty lines</CardHeader>
             <FormGroup>
               <label htmlFor='anskey'>
                 <span className=''>Answer</span>

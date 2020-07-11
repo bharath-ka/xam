@@ -45,9 +45,9 @@ const Register = () => {
         }
 
     }
-    if (isAuthenticated) {
-        return <Redirect to='/tests' ></Redirect>
-    }
+    // if (isAuthenticated) {
+    //     return <Redirect to='/tests' ></Redirect>
+    // }
 
     return (
         <div className="mt-5 col-lg-8 mx-auto">
@@ -207,7 +207,7 @@ const Register = () => {
                             </Button>
                         </div>
                     </Form>
-                    <h6 className="text-center">Already have an account? <CardLink href="#" className="card-link">login</CardLink> </h6>
+                    {/* <h6 className="text-center">Already have an account? <CardLink href="#" className="card-link">login</CardLink> </h6> */}
                 </CardBody>
             </Card>
         </div>

@@ -41,12 +41,12 @@ const NavBar = () => {
     <Fragment>
       <NavItem>
         <Link to='/login'>
-          <Button pill>Login</Button>
+          <Button pill>Student</Button>
         </Link>
       </NavItem>
       <NavItem>
-        <Link to='/signup'>
-          <Button pill>Sign Up</Button>
+        <Link to='/teacher/login'>
+          <Button pill>Teacher</Button>
         </Link>
       </NavItem>
     </Fragment>

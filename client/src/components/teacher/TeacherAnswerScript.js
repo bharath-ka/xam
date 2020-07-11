@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import {
   Card,
   CardBody,
@@ -7,25 +7,33 @@ import {
   FormInput,
   CardFooter,
   FormGroup,
+  Button,
 } from 'shards-react';
 import './horizontal.scss';
 import { Pagination } from 'react-bootstrap';
+import axios from 'axios';
+import TeacherSubmitModal from './TeacherSubmitModal';
+const TeacherAnswerScript = ({ history }) => {
+  const [students, setStudents] = useState([]);
 
-const TeacherAnswerScript = () => {
-  const [students] = useState([
-    {
-      name: 'Ho',
-    },
-    {
-      name: 'Ho',
-    },
-
-    {
-      name: 'Ho',
-    },
-  ]);
+  useEffect(() => {
+    const fetchStudentAnswers = async () => {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      const body = JSON.stringify({
+        user: '5e38f7d24e845663f7f18114',
+      });
+      const res = await axios.post('/api/answers/list', body, config);
+      setStudents(res.data);
+      console.log(res.data);
+    };
+    fetchStudentAnswers();
+  }, []);
   const [currentPage, setCurrentPage] = useState(1);
-  const [studentsPerPage] = useState(4);
+  const [studentsPerPage] = useState(1);
 
   //Get current posts
   const indexOfLastQuestion = currentPage * studentsPerPage;
@@ -38,67 +46,41 @@ const TeacherAnswerScript = () => {
   for (let i = 1; i <= Math.ceil(students.length / studentsPerPage); i++) {
     pageNumbers.push(i);
   }
-  return (
+  return currentStudents.length !== 0 ? (
     <Fragment>
       <Card style={{ backgroundColor: '#f9f7f7' }}>
-        <CardHeader>Rank : Medium</CardHeader>
-        <CardBody>
-          <CardTitle style={{ fontSize: '23px', fontWeight: 'normal' }}>
-            Explain the steps in modelling and the method of establishing sound
-            controlling
-          </CardTitle>
-          <FormGroup>
-            <CardTitle>Answer :</CardTitle>
-            <Card>
+        {currentStudents.length !== 0 &&
+          currentStudents.map((student) => (
+            <Fragment key={student._id}>
+              <CardHeader>
+                Rank :{' '}
+                {student.question_id !== undefined && student.question_id.rank}{' '}
+              </CardHeader>
               <CardBody>
-                <div style={{ maxHeight:'300px', overflow: 'scroll' }}>
-                  Steps in controlling mainly involves 4 major steps <br />
-                  1. Establishment of standards / Setting Standards /
-                  Identifying the standards and objectives Standards are from
-                  the boundary line for the controlling. We need to form the
-                  standards depending on the internet of company and then we
-                  need to develop the product satisfying. These standards are
-                  like a model depending on which implementation and
-                  developments takes place. While creating a project it is
-                  important to set up the standards of the project.
-                  <br />
-                  The standards are precise and quantitative method. While
-                  measuring standards, they are referred or determined as the
-                  referential line or the base for the standard. While
-                  establishing standards they have be in terms of “cost has to
-                  be reduced” and “rejection has to be reduced” rather than
-                  specifying “cost has to reduced by 10%” and “rejection has to
-                  be reduced by 0.5%”. The standards are considered as the
-                  benchmark while used in measuring the performance.
-                  <br />
-                  This also include some of standards. Standards are, by
-                  definition, simply the criteria of performance. They are the
-                  selected points in an entire planning program at which
-                  performance is measured so that managers can receive signals
-                  about how things are going and thus do not have to watch every
-                  step in the execution of plans. Standard elements form
-                  precisely worded, measurable objectives and are especially
-                  important for control.
-                  <br />
-                  In an industrial enterprise, standards could include sales and
-                  production targets, work attendance goals, safety records,
-                  etc.
-                </div>
+                <CardTitle style={{ fontSize: '23px', fontWeight: 'normal' }}>
+                  {student.question_id !== undefined &&
+                    student.question_id.question}
+                </CardTitle>
+                <FormGroup>
+                  <CardTitle>Answer :</CardTitle>
+                  <Card>
+                    <CardBody>{student.answer}</CardBody>
+                  </Card>
+                </FormGroup>
               </CardBody>
-            </Card>
-          </FormGroup>
-        </CardBody>
-        <CardFooter style={{ fontSize: '23px' }}>
-          <div className='cf'>
-            <div>
-              Prevevaluted : <strong>2.6</strong>
-            </div>
-            <div className='ml-auto'>Evaluation :</div>
-            <div className='ml-2'>
-              <FormInput placeholder='Evaluate' />
-            </div>
-          </div>
-        </CardFooter>
+              <CardFooter style={{ fontSize: '23px' }}>
+                <div className='cf'>
+                  <div>
+                    Prevevalution : <strong>2.5</strong>
+                  </div>
+                  <div className='ml-auto'>Evaluation :</div>
+                  <div className='ml-2'>
+                    <FormInput placeholder='Evaluate' />
+                  </div>
+                </div>
+              </CardFooter>
+            </Fragment>
+          ))}
       </Card>
       <Pagination className='d-flex justify-content-center'>
         <Pagination.First onClick={() => setCurrentPage(pageNumbers[0])} />
@@ -133,7 +115,10 @@ const TeacherAnswerScript = () => {
           onClick={() => setCurrentPage(pageNumbers[pageNumbers.length - 1])}
         />
       </Pagination>
+      <TeacherSubmitModal history={history} />
     </Fragment>
+  ) : (
+    <h3>No Test Takers</h3>
   );
 };
 

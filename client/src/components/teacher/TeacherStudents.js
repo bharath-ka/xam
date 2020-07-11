@@ -11,27 +11,24 @@ import { Pagination } from 'react-bootstrap';
 const TeacherStudents = ({ history }) => {
   const [students] = useState([
     {
-      usn: '1AY16IS001',
-      name: 'Bharath Karanth A',
-      preevaluation: '15',
-      evaluation: true,
-    },
-    {
       usn: '1AY16IS002',
       name: 'Ashwin Prasad A',
-      preevaluation: '15',
+      actualevaluation: '12',
+      preevaluation: '13',
       evaluation: false,
     },
     {
       usn: '1AY16IS003',
       name: 'Anshula Ranjit',
-      preevaluation: '15',
+      preevaluation: '14',
+      actualevaluation: '15',
       evaluation: false,
     },
     {
-      usn: '1AY16IS004',
-      name: 'Sarthak Sharma',
-      preevaluation: '15',
+      usn: '1AY16IS001',
+      name: 'Bharath Karanth A',
+      actualevaluation: '',
+      preevaluation: '12.5',
       evaluation: false,
     },
   ]);
@@ -49,17 +46,19 @@ const TeacherStudents = ({ history }) => {
   for (let i = 1; i <= Math.ceil(students.length / studentsPerPage); i++) {
     pageNumbers.push(i);
   }
+  console.log(history);
   return (
     <div>
       <h1>Test Students : ME</h1>
       <Card>
         <CardBody>
-          <table class='table'>
+          <table className='table'>
             <thead>
               <tr>
                 <th scope='col'>USN</th>
                 <th scope='col'>Name</th>
                 <th scope='col'>Prevaluated Results</th>
+                <th scope='col'>Actual Evaluation</th>
                 <th scope='col'>Evaluation</th>
               </tr>
             </thead>
@@ -76,7 +75,12 @@ const TeacherStudents = ({ history }) => {
                     </div>
                   </td>
                   <td>
-                    {student.evaluation ? (
+                    <div style={{ fontSize: '25px' }}>
+                      {student.actualevaluation}
+                    </div>
+                  </td>
+                  <td>
+                    {student.actualevaluation ? (
                       <button className='btn btn-success'>Completed</button>
                     ) : (
                       <button
