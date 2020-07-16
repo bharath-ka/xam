@@ -86,7 +86,7 @@ const BaseTestQuestions = ({ location, history }) => {
               <FormTextarea
                 name={baseTestQuestion._id}
                 value={hookanswer[baseTestQuestion._id]}
-                rows='6'
+                rows='10'
                 onChange={(e) => handleChange(e)}
               />
             </FormGroup>

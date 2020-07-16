@@ -41,7 +41,7 @@ const TeacherSubmitModal = ({ history }) => {
           <Button theme='secondary' onClick={toggle}>
             Close
           </Button>
-          <Button onClick={history.push('/teacher/students')}>Submit</Button>
+          <Button>Submit</Button>
         </ModalFooter>
       </Modal>
     </Fragment>

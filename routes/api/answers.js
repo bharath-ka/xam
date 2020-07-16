@@ -65,16 +65,21 @@ router.post('/basequestion/evaluate', async (req, res) => {
         questionRound,
       });
       await ans.save();
-      let anskey = await AnswerKey.find({ question_id });
-      let question = await Question.find({ _id: question_id });
-      if (answer === anskey[0].answerKey) {
-        if (question[0].rank === 'easy') eval['easy']++;
-        else if (question[0].rank === 'medium') eval['medium']++;
-        else eval['hard']++;
-      } else eval['easy']++;
-    }
+      let anskey = await AnswerKey.findOne({ question_id });
 
+      let question = await Question.findOne({ _id: question_id });
+      question = question.toObject();
+      let answerLength = answer.length;
+      console.log('answerLength', answerLength, 'anskey', anskey.answerKey);
+      if (anskey.answerKey == answerLength) {
+        console.log('true', 'rank', question.rank);
+        if (question.rank === 'easy') eval['easy']++;
+        else if (question.rank === 'medium') eval['medium']++;
+        else if (question.rank === 'hard') eval['hard']++;
+      }
+    }
     const max = Math.max(eval['easy'], eval['medium'], eval['hard']);
+    console.log('eval', eval, 'max', max);
     if (max === 0) {
       return res.status(200).json({ rank: 'easy' });
     }
@@ -83,7 +88,23 @@ router.post('/basequestion/evaluate', async (req, res) => {
         rankArray.push(prop);
       }
     }
-    const rank = rankArray[Math.floor(Math.random() * rankArray.length)];
+    // const rank = rankArray[Math.floor(Math.random() * rankArray.length)];
+    function decideRank(rankArray) {
+      let ra = rankArray.find((rank) => rank === 'hard');
+      if (ra !== undefined) {
+        return 'hard';
+      } else {
+        let ra = rankArray.find((rank) => rank === 'medium');
+        if (ra !== undefined) {
+          return 'medium';
+        } else {
+          return 'easy';
+        }
+      }
+    }
+
+    const rank = decideRank(rankArray);
+    console.log(rank);
 
     const filter = { user_id, test_id, base_id };
     const update = { submitted: true };
@@ -95,13 +116,25 @@ router.post('/basequestion/evaluate', async (req, res) => {
       }
     );
 
-    const chapter_ids = await Chapter.find({ module_id: { $in: module_ids } });
-    const questions = await Question.find({
-      chapter_id: { $in: chapter_ids },
-      rank,
-    });
-    const nextQuestion =
-      questions[Math.floor(Math.random() * questions.length)];
+    // // const chapter_ids = await Chapter.find({ module_id: { $in: module_ids } });
+    // if(answer)
+    let nextQuestion;
+    if (rank === 'easy') {
+      nextQuestion = await Question.findById({
+        _id: '5e1db4ab865fd33331d9d250',
+      });
+    } else if (rank === 'medium') {
+      nextQuestion = await Question.findById({
+        _id: '5e1db4b1865fd33331d9d251',
+      });
+    } else if (rank === 'hard') {
+      nextQuestion = await Question.findById({
+        _id: '5e1db4bd865fd33331d9d252',
+      });
+    }
+
+    // const nextQuestion =
+    //   questions[Math.floor(Math.random() * questions.length)];
     // let { questionround } = await TestCompletion.find({ test_id, user_id }).limit(1).sort({ 'createdon': -1 });
     const question_id = nextQuestion._id;
     const { branch_id, section_id } = await User.findOne({ _id: user_id });
@@ -122,7 +155,7 @@ router.post('/basequestion/evaluate', async (req, res) => {
       rank,
     });
     await testCompletion.save();
-
+    console.log(nextQuestion);
     res.status(200).json({ nextQuestion, questionround });
   } catch (error) {
     console.error(error.stack);
@@ -139,6 +172,7 @@ router.post('/question/evaluate', async (req, res) => {
   };
   try {
     let question_id = Object.keys(qanswers)[0];
+
     let answer = qanswers[question_id];
     const ans = new Answer({
       user_id,
@@ -148,22 +182,40 @@ router.post('/question/evaluate', async (req, res) => {
       questionRound,
     });
     await ans.save();
-    let anskey = await AnswerKey.find({ question_id });
+    let anskey = await AnswerKey.findOne({ question_id });
     let question = await Question.findOne({ _id: question_id });
-    if (answer === anskey.answerKey) {
-      if (question[0].rank === 'easy') eval['easy'] = 1;
-      else if (question[0].rank === 'medium') eval['medium'] = 1;
+    question = question.toObject();
+    console.log(
+      'answer',
+      answer.length,
+      'anskey',
+      anskey.answerKey,
+      'question',
+      question.rank
+    );
+
+    answerLength = answer.length;
+    if (answerLength == anskey.answerKey) {
+      if (question.rank === 'easy') eval['easy'] = 1;
+      else if (question.rank === 'medium') eval['medium'] = 1;
       else eval['hard'] = 1;
     }
     let rank;
+    console.log('eval', eval);
     if (eval.easy == 1) {
-      rank = 'easy';
-    } else if (eval.medium == 1) {
       rank = 'medium';
     } else if (eval.medium == 1) {
       rank = 'hard';
+    } else if (eval.hard == 1) {
+      rank = 'hard';
     } else {
-      rank = 'easy';
+      if (question.rank === 'hard') {
+        rank = 'medium';
+      } else if (question.rank === 'medium') {
+        rank = 'easy';
+      } else {
+        rank = 'easy';
+      }
     }
     const filter = { user_id, test_id, question_id };
     const update = { submitted: true };
@@ -200,13 +252,30 @@ router.post('/question/evaluate', async (req, res) => {
         .status(200)
         .json({ nextQuestion, questionround, completed: true });
     }
-    const chapter_ids = await Chapter.find({ module_id: { $in: module_ids } });
-    const questions = await Question.find({
-      chapter_id: { $in: chapter_ids },
-      rank,
-    });
-    nextQuestion = questions[Math.floor(Math.random() * questions.length)];
+    // const chapter_ids = await Chapter.find({ module_id: { $in: module_ids } });
+    // const questions = await Question.find({
+    //   chapter_id: { $in: chapter_ids },
+    //   rank,
+    // });
+    // nextQuestion = questions[Math.floor(Math.random() * questions.length)];
+
+    if (rank === 'easy') {
+      nextQuestion = await Question.findById({
+        _id: '5f103da5d9f5ec21ccfb9f8a',
+      });
+    } else if (rank === 'medium') {
+      nextQuestion = await Question.findById({
+        _id: '5e1db4b1865fd33331d9d251',
+      });
+    } else if (rank === 'hard') {
+      console.log(rank);
+      nextQuestion = await Question.findById({
+        _id: '5f10330863f5620d483dc93d',
+      });
+    }
+
     question_id = nextQuestion._id;
+
     const testCompletion = new TestCompletion({
       test_id,
       user_id,
