@@ -20,6 +20,7 @@ const AnswerSubmitModal = ({ answers, test_id, module_ids, history, questionroun
             history,
             currentround: questionround.currentRound
         };
+        console.log(ansObj)
         dispatch(postAnswers(ansObj));
         setOpen(false);
     }

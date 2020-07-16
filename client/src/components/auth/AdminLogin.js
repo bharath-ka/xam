@@ -17,7 +17,7 @@ import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { login } from '../../actions/auth';
-const Login = () => {
+const AdminLogin = ({ history }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
@@ -45,7 +45,7 @@ const Login = () => {
     <div className='mt-5 col-lg-6 mx-auto'>
       <Card style={{ backgroundColor: '#f9f7f7' }}>
         <CardBody>
-          <h3 className='text-center  mb-4'>Student Login</h3>
+          <h3 className='text-center  mb-4'>Admin Login</h3>
 
           <Form onSubmit={handleSubmit}>
             <FormGroup>
@@ -91,19 +91,20 @@ const Login = () => {
               </InputGroup>
             </FormGroup>
             <div className='text-center mb-3'>
-              <Button pill theme='primary' type='submit'>
+              <Button
+                pill
+                theme='primary'
+                type='submit'
+                onClick={() => history.push('/signup')}
+              >
                 Login
               </Button>
             </div>
           </Form>
-          <h6 className='text-center'>
-            Don’t have an account? <br />
-            <span style={{ color: 'blue' }}>Ask admin</span>
-          </h6>
         </CardBody>
       </Card>
     </div>
   );
 };
 
-export default Login;
+export default AdminLogin;

@@ -26,10 +26,10 @@ const Register = () => {
         password: '',
         password1: '',
         role: '',
-        section_id: '',
+        subject_id: '',
         branch_id: ''
     });
-    const { name, email, password, password1, role, branch_id, section_id } = formData;
+    const { name, email, password, password1, role, branch_id, subject_id } = formData;
     const handleChange = (e) => {
         setformData({
             ...formData,
@@ -41,13 +41,13 @@ const Register = () => {
         if (password !== password1)
             dispatch(setAlert("Passwords donot match", 'danger'));
         else {
-            dispatch(register({ name, email, password, role, branch_id, section_id }));
+            dispatch(register({ name, email, password, role, branch_id, subject_id }));
         }
 
     }
-    // if (isAuthenticated) {
-    //     return <Redirect to='/tests' ></Redirect>
-    // }
+    if (isAuthenticated) {
+        return <Redirect to='/tests' ></Redirect>
+    }
 
     return (
         <div className="mt-5 col-lg-8 mx-auto">
@@ -126,7 +126,7 @@ const Register = () => {
                                             </InputGroupText>
                                         </InputGroupAddon>
                                         <FormSelect
-                                            id="section_id"
+                                            id="branch_id"
                                             name='branch_id'
                                             onChange={e => handleChange(e)}
                                             value={branch_id}
@@ -145,22 +145,22 @@ const Register = () => {
                         <Row>
                             <Col>
                                 <FormGroup>
-                                    <label htmlFor="section_id"><span className="">Section</span></label>
+                                    <label htmlFor="subject_id"><span className="">Subject</span></label>
                                     <InputGroup seamless>
                                         <InputGroupAddon type="prepend">
                                             <InputGroupText> <FontAwesomeIcon icon={faSchool} />
                                             </InputGroupText>
                                         </InputGroupAddon>
                                         <FormSelect
-                                            id="section_id"
-                                            name='section_id'
+                                            id="subject_id"
+                                            name='subject_id'
                                             onChange={e => handleChange(e)}
-                                            value={section_id}>
+                                            value={subject_id}>
                                             <option value="">
-                                                Choose a Section
+                                                Choose a Subject
                                             </option>
-                                            <option value="5e38f7394e845663f7f18112">A</option>
-                                            <option value="5e38f7394e845663f7f18112">B</option>
+                                            <option value="5e1da8a767916031c38d0dc6">Computer Networks</option>
+                                            <option value="5e1da8a767916031c38d0dc6">Operational Research</option>
                                         </FormSelect>
                                     </InputGroup>
                                 </FormGroup>
@@ -207,7 +207,7 @@ const Register = () => {
                             </Button>
                         </div>
                     </Form>
-                    {/* <h6 className="text-center">Already have an account? <CardLink href="#" className="card-link">login</CardLink> </h6> */}
+                    <h6 className="text-center">Already have an account? <CardLink href="#" className="card-link">login</CardLink> </h6>
                 </CardBody>
             </Card>
         </div>

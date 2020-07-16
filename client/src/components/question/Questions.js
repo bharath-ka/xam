@@ -59,7 +59,7 @@ const Questions = ({ location, history }) => {
                             <FormTextarea
                                 name={nextQuestion._id}
                                 value={hookanswer[nextQuestion._id]}
-                                rows="6"
+                                rows="10"
                                 onChange={e => handleChange(e)}
                             />
                         </FormGroup>

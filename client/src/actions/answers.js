@@ -59,6 +59,7 @@ export const postAnswers = ({ user_id, qanswers, test_id, module_ids, currentrou
             }
         }
         const body = JSON.stringify({ user_id, qanswers, test_id, questionRound: currentround, module_ids });
+        console.log(body);
         const res = await axios.post('/api/answers/question/evaluate', body, config);
         // dispatch({
         //     type: POST_ANSWERS,

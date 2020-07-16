@@ -13,14 +13,7 @@ import {
 } from 'shards-react';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Redirect } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { login } from '../../actions/auth';
-const Login = () => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const dispatch = useDispatch();
-
+const TeacherLogin = ({ history }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -35,17 +28,12 @@ const Login = () => {
     });
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(login({ email, password }));
   };
-  if (isAuthenticated) {
-    return <Redirect to='/tests'></Redirect>;
-  }
-
   return (
     <div className='mt-5 col-lg-6 mx-auto'>
       <Card style={{ backgroundColor: '#f9f7f7' }}>
         <CardBody>
-          <h3 className='text-center  mb-4'>Student Login</h3>
+          <h3 className='text-center  mb-4'>Teacher Login</h3>
 
           <Form onSubmit={handleSubmit}>
             <FormGroup>
@@ -54,7 +42,7 @@ const Login = () => {
               </label>
               <InputGroup>
                 <InputGroupAddon type='prepend'>
-                  <InputGroupText>
+                  <InputGroupText required>
                     {' '}
                     <FontAwesomeIcon icon={faUser} />
                   </InputGroupText>
@@ -91,7 +79,12 @@ const Login = () => {
               </InputGroup>
             </FormGroup>
             <div className='text-center mb-3'>
-              <Button pill theme='primary' type='submit'>
+              <Button
+                pill
+                theme='primary'
+                type='submit'
+                onClick={() => history.push('/teacher/tests')}
+              >
                 Login
               </Button>
             </div>
@@ -106,4 +99,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default TeacherLogin;
